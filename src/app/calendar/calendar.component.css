@@ -1,0 +1,35 @@
+.calendar-card{
+    width: 300px;
+}
+.mt-5{
+    margin-top: 5em;
+}
+.lists{
+    display: flex;
+    justify-content: space-around;
+    width: 40em;
+}
+.result-list{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 70%;
+}
+
+.mini-list{
+    margin: 2em;
+    padding: 2em;
+    background-color: #9a8cb452;
+    border-radius: 30px;
+}
+.date{
+    margin-left: 2px;
+}
+
+.button-row{
+    margin: 2em;
+    display: flex;
+    min-width: 40em;
+    justify-content: space-around;
+    flex-direction: row;
+}
