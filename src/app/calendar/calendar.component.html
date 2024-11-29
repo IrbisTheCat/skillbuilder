@@ -40,21 +40,21 @@
     @for(date of schedule; track date){
         <div class="mini-list">
         <h3 class="date">{{  date[0] | date: 'EEEE, MMMM d' }}</h3>
-        <mat-selection-list #result >
+        <mat-list #result >
                 @for (jump of date[1].jumps; track jump) {
-                <mat-list-option>{{jump}}</mat-list-option>
+                <mat-list-item>{{jump}}</mat-list-item>
                 }
             
      
                 @for (spin of date[1].spins; track spin) {
-                <mat-list-option>{{spin}}</mat-list-option>
+                <mat-list-item>{{spin}}</mat-list-item>
                 }
         
                 @for (move of date[1].moves; track move) {
-                <mat-list-option>{{move}}</mat-list-option>
+                <mat-list-item>{{move}}</mat-list-item>
                 }
-            
-        </mat-selection-list>
+                <button mat-button class="mat-primary" (click)="deleteOption(date[0])">Delete</button>
+        </mat-list>
     </div>
     }
 

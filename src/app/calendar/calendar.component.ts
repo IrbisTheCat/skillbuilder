@@ -8,8 +8,8 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import {MatSelectionList} from '@angular/material/list';
-import { Console } from 'console';
 import { CommonModule } from '@angular/common';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-calendar',
@@ -17,12 +17,18 @@ import { CommonModule } from '@angular/common';
   providers: [
     provideNativeDateAdapter(),   
 ],
-  imports: [MatButtonModule,MatCardModule, MatDatepickerModule,MatListModule,CommonModule, MatInputModule,MatFormFieldModule,FormsModule],
+  imports: [MatButtonModule,MatCardModule, MatDatepickerModule,MatListModule,CommonModule,MatIconModule, MatInputModule,MatFormFieldModule,FormsModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
 export class CalendarComponent {
+deleteOption(arg0: Date) {
+    this.schedule.delete(arg0);
+    this.generateMailtoLink();
+}
+
 sendToUser() {
 throw new Error('Method not implemented.');
 }
@@ -48,7 +54,7 @@ throw new Error('Method not implemented.');
   }
 
   updateDay() {
-    console.log('hi')
+    
       //if has date and then 
       if(this.selectedDate!= null ){
         this.schedule.set(
