@@ -1,0 +1,29 @@
+<form [formGroup]="emailForm">
+    <mat-form-field>
+        <mat-label>Your email</mat-label>
+        <input
+          matInput
+          placeholder="some@example.com"
+          formControlName="email"
+          required
+        />
+    
+        <mat-error *ngIf="email?.errors?.['required']">Email is required.</mat-error>
+        <mat-error *ngIf="email?.errors?.['email']">Enter a valid email.</mat-error>
+    </mat-form-field>
+    
+    
+    <mat-form-field>
+        <mat-label>Destination Email</mat-label>
+        <input
+          matInput
+          placeholder="some@example.com"
+          formControlName="destinationEmail"
+          required
+        />
+        <mat-error *ngIf="destinationEmail?.errors?.['required']">Destination email is required.</mat-error>
+        <mat-error *ngIf="destinationEmail?.errors?.['email']">Enter a valid destination email.</mat-error>
+    </mat-form-field>
+    <button mat-raised-button class="mat-primary"  (click)="sendmail()" >Send To Someone</button>
+    </form>
+    

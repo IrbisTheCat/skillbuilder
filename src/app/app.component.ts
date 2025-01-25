@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CalendarComponent } from "./calendar/calendar.component";
+import { StepperComponent } from "./stepper/stepper.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CalendarComponent],
+  imports: [RouterOutlet, StepperComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
