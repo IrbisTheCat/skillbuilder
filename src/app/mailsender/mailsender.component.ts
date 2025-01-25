@@ -99,11 +99,10 @@ export class MailsenderComponent {
 
     }
 
-    console.log(`${this.apiUrl}/send`)
 
 
 
-    this.http.post<any>(`${this.apiUrl}/send`, data)
+    this.http.post<any>(`${this.apiUrl}`, data)
     .subscribe({
       next: (response) => {
         console.log('Success:', response);
