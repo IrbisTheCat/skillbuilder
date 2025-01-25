@@ -3,17 +3,18 @@ import { ScheduleService } from '../schedule.service';
 import { Console } from 'console';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { merge } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { figureSkatingElements } from '../consts/urls';
+import {MatIconModule} from '@angular/material/icon';
 @Component({
   selector: 'app-mailsender',
   standalone: true,
-  imports: [HttpClientModule, MatButtonModule, CommonModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
+  imports: [HttpClientModule, MatButtonModule, CommonModule,MatIconModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule],
   templateUrl: './mailsender.component.html',
   styleUrl: './mailsender.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,12 +23,20 @@ export class MailsenderComponent {
 
   emailForm: FormGroup;
   private apiUrl =  environment.apiUrl;
+   accesspassword= environment.accesspassword;
   
+  hide = signal(true);
+
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   constructor(private fb: FormBuilder, private scheduleService: ScheduleService, private http: HttpClient) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      destinationEmail: ['', [Validators.required, Validators.email]]
+      destinationEmail: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, passwordMatcher()]]
     });
 
   }
@@ -41,7 +50,9 @@ export class MailsenderComponent {
   }
 
   onSubmit() {
-    //console.log(this.emailForm.valid)
+    if(this.emailForm.get("password")?.value!=this.accesspassword){
+      return;
+    }
     if (this.emailForm.valid) {
       this.sendmail();
       alert('Email sent successfully!');
@@ -120,4 +131,14 @@ export class MailsenderComponent {
 
 
 
+}
+ export   function passwordMatcher(): ValidatorFn  {
+  return (control: AbstractControl): ValidationErrors | null => {
+    // Example check for at least one uppercase letter
+    if (control.value != environment.accesspassword) {
+      return { passwordMismatch: 'Enter a matching password' };
+    }
+    return null;  // Return null if valid
+  };
+ // return emailForm.get('password')?.value!=.accesspassword;
 }

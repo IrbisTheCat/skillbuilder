@@ -24,6 +24,23 @@
         <mat-error *ngIf="destinationEmail?.errors?.['required']">Destination email is required.</mat-error>
         <mat-error *ngIf="destinationEmail?.errors?.['email']">Enter a valid destination email.</mat-error>
     </mat-form-field>
-    <button mat-raised-button class="mat-primary"  (click)="sendmail()" >Send To Someone</button>
+
+    <mat-form-field>
+      <mat-label>Enter your password</mat-label>
+      <input matInput [type]="hide() ? 'password' : 'text'"  formControlName="password"
+      required/>
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="clickEvent($event)"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide()"
+      >
+        <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+
+      <mat-error  *ngIf="destinationEmail?.errors?.['passwordMismatch']">Enter a matching password</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button class="mat-primary"  (click)="onSubmit()" >Send To Someone</button>
     </form>
-    
