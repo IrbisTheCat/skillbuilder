@@ -39,7 +39,6 @@ export class MailsenderComponent {
       destinationEmail: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, passwordMatcher()]]
     });
-    console.log('hi')
   }
 
   get email() {
