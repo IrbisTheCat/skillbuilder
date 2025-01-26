@@ -43,7 +43,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.x'
+          ruby-version: 'latest'
 
       # Step 5: Install Jekyll dependencies
       - name: Install Jekyll dependencies
