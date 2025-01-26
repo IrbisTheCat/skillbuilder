@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'http://localhost:3000', // Example development API URL
-    accesspassword: "sfdsfdsf"
+    apiUrl: '{{API_URL}}', 
+    accesspassword: '{{ACCESSPASSWORD}}'
   };
