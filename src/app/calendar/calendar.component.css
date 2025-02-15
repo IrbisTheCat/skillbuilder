@@ -33,7 +33,7 @@
 .button-row{
     margin: 2em;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
 }
@@ -44,3 +44,14 @@ button{
 a{
     margin: 1em;
 }
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .flex-between {
+    display: flex;
+    justify-content: space-evenly;
+
+  }

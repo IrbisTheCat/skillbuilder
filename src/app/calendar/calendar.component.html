@@ -1,13 +1,7 @@
-<mat-form-field>
-  <mat-label>Choose a date</mat-label>
-  <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate">
-  <mat-hint>MM/DD/YYYY</mat-hint>
-  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-  <mat-datepicker #picker></mat-datepicker>
-</mat-form-field>
-
-
-<div class="lists">
+<div class="flex-container">
+<app-datepicker  (dateSelected)="onDateSelected($event)"></app-datepicker>
+</div>
+<div class="lists flex-between">
   <mat-selection-list #jumpstuff class="mt-5">
     @for (jump of jumps; track jump) {
     <mat-list-option [value]="jump">{{jump}}</mat-list-option>
@@ -26,34 +20,8 @@
 </div>
 <div class="button-row">
   <button mat-raised-button class="mat-primary" (click)="updateDay()">Add to selected day</button>
-
-
-
   <button mat-raised-button class="mat-warn" (click)="clearSelection()">Clear Selection</button>
 
 </div>
+<app-schedule-display [schedule]="schedule"></app-schedule-display>
 
-<div class="mt-5 result-list">
-
-  @for(date of schedule; track date){
-  <div class="mini-list">
-    <h3 class="date">{{ date[0] | date: 'EEEE, MMMM d' }}</h3>
-    <mat-list #result>
-      @for (jump of date[1].jumps; track jump) {
-      <mat-list-item>{{jump}}</mat-list-item>
-      }
-
-
-      @for (spin of date[1].spins; track spin) {
-      <mat-list-item>{{spin}}</mat-list-item>
-      }
-
-      @for (move of date[1].moves; track move) {
-      <mat-list-item>{{move}}</mat-list-item>
-      }
-      <button mat-button class="mat-primary" (click)="deleteOption(date[0])">Delete</button>
-    </mat-list>
-  </div>
-  }
-
-</div>

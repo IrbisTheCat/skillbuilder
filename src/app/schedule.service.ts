@@ -1,21 +1,28 @@
 import { Injectable } from '@angular/core';
-import {Activity} from  '../app/calendar/calendar.component'
+import { BehaviorSubject } from 'rxjs';
+import { Skill } from './models/skill.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ScheduleService {
-  schedule = new Map<Date, Activity>();
+  private scheduleSubject = new BehaviorSubject<Map<Date, Skill[]>>(new Map<Date, Skill[]>());
+  schedule$ = this.scheduleSubject.asObservable();
 
-  getSchedule(): Map<Date, Activity> {
-    return this.schedule;
+  getSchedule(): Map<Date, Skill[]> {
+    return this.scheduleSubject.value;
   }
 
-  setActivity(date: Date, activity: Activity): void {
-    this.schedule.set(date, activity);
+  updateSchedule(date: Date, skills: Skill[]) {
+    const currentSchedule = this.scheduleSubject.value;
+    currentSchedule.set(date, skills);
+    this.scheduleSubject.next(currentSchedule);
   }
 
-  removeActivity(date: Date): void {
-    this.schedule.delete(date);
+  deleteSchedule(date: Date) {
+    const currentSchedule = this.scheduleSubject.value;
+    currentSchedule.delete(date);
+    this.scheduleSubject.next(currentSchedule);
   }
 }
 

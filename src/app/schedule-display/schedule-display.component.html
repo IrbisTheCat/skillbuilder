@@ -1,0 +1,22 @@
+<div class="card-container">
+
+  <ng-container *ngFor="let entry of schedule | keyvalue">
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ entry.key | date: 'EEEE, MMMM d' }}
+        </mat-card-title>
+        <mat-card-subtitle>Scheduled Skills</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+    
+        <ul>
+          <ng-container *ngFor="let val of entry.value">
+          <li>{{ val.name }}</li>
+          
+      </ng-container>
+        </ul>
+    </mat-card-content>
+      <button mat-button class="mat-primary" (click)="deleteOption(entry.key)">Delete</button>
+    </mat-card>
+  </ng-container>
+</div>

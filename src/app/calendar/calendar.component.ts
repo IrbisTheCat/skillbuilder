@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, model, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -11,6 +11,9 @@ import { MatSelectionList } from '@angular/material/list';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { ScheduleService } from '../schedule.service';
+import { DatepickerComponent } from "../datepicker/datepicker.component";
+import { Skill } from '../models/skill.model';
+import { ScheduleDisplayComponent } from "../schedule-display/schedule-display.component";
 
 @Component({
   selector: 'app-calendar',
@@ -18,21 +21,21 @@ import { ScheduleService } from '../schedule.service';
   providers: [
     provideNativeDateAdapter(),
   ],
-  imports: [MatButtonModule, MatCardModule, MatDatepickerModule, MatListModule, CommonModule, MatIconModule, MatInputModule, MatFormFieldModule, FormsModule],
+  imports: [MatButtonModule, MatCardModule, MatDatepickerModule, MatListModule, CommonModule, MatIconModule, MatInputModule, MatFormFieldModule, FormsModule, DatepickerComponent, ScheduleDisplayComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class CalendarComponent {
-  constructor(private scheduleService: ScheduleService) { }
-
-  deleteOption(arg0: Date) {
-    this.schedule.delete(arg0);
+export class CalendarComponent implements OnInit {
+  constructor(private scheduleService: ScheduleService, private cdr: ChangeDetectorRef) { }
+  schedule: Map<Date, Skill[]> = new Map<Date, Skill[]>();
+  ngOnInit() {
+    this.scheduleService.schedule$.subscribe(schedule => {
+      this.schedule = schedule;
+      this.cdr.detectChanges(); 
+    });
   }
-
-  selected = model<Date | null>(null);
-  schedule = this.scheduleService.getSchedule();
   jumps: string[] = ['Axel', 'Salchow', 'Toeloop', 'Loop', 'Flip'];
   spins: string[] = ['Camel', 'Flying Camel', 'Sit'];
   moves: string[] = ['Twizzle', 'Swizzle'];
@@ -51,22 +54,35 @@ export class CalendarComponent {
     this.movesstuff?.deselectAll()
   }
 
+  onDateSelected(date: string) {
+    this.selectedDate = new Date(date);
+
+  }
+
   updateDay() {
 
     //if has date and then 
     if (this.selectedDate != null) {
-      this.schedule.set(
-        this.selectedDate,
-        {
-          jumps: this.jumpstuff?.selectedOptions.selected.map(option => option.value as string),
-          spins: this.spinstuff?.selectedOptions.selected.map(option => option.value as string),
-          moves: this.movesstuff?.selectedOptions.selected.map(option => option.value as string)
-        }
-      )
-      console.log(this.schedule.get(this.selectedDate)?.jumps?.toString())
+
+      const skills: Skill[] = [];
+
+      this.jumpstuff?.selectedOptions.selected.forEach(option => {
+        skills.push({ name: option.value, type: 'jump' });
+      });
+  
+      this.spinstuff?.selectedOptions.selected.forEach(option => {
+        skills.push({ name: option.value, type: 'spin' });
+      });
+  
+      this.movesstuff?.selectedOptions.selected.forEach(option => {
+        skills.push({ name: option.value, type: 'move' });
+      });
+  
+      this.scheduleService.updateSchedule(this.selectedDate, skills);
     }
 
     this.clearSelection();
+    console.log(this.schedule);
 
 
   }
@@ -75,9 +91,3 @@ export class CalendarComponent {
 
 }
 
-
-export type Activity = {
-  jumps: string[] | undefined;
-  spins: string[] | undefined;
-  moves: string[] | undefined;
-};

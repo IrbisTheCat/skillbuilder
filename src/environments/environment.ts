@@ -1,5 +1,4 @@
 export const environment = {
     production: false,
-    apiUrl: 'sdfsdfsdf',
-    accesspassword: "sfdsfdsf"
+    apiUrl: 'https://chaldon.entrydns.org/dev/send',
   };

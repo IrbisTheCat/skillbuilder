@@ -11,6 +11,8 @@ import { CommonModule } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { figureSkatingElements } from '../consts/urls';
 import {MatIconModule} from '@angular/material/icon';
+import { Skill } from '../models/skill.model';
+
 @Component({
   selector: 'app-mailsender',
   standalone: true,
@@ -23,8 +25,6 @@ export class MailsenderComponent {
 
   emailForm: FormGroup;
   private apiUrl =  environment.apiUrl;
-   accesspassword= environment.accesspassword;
-  
   hide = signal(true);  
 
 
@@ -50,9 +50,7 @@ export class MailsenderComponent {
   }
 
   onSubmit() {
-    if(this.emailForm.get("password")?.value!=this.accesspassword){
-      return;
-    }
+
     if (this.emailForm.valid) {
       this.sendmail();
       alert('Email sent successfully!');
@@ -75,30 +73,13 @@ export class MailsenderComponent {
     skatingMap.forEach((value, key) => {
       const prettyDay =this.formatDate(key); // Extract date (YYYY-MM-DD)
 
-      value['jumps']?.forEach(element => {
+      value.forEach((element: Skill) => {
         result.push({
           date: prettyDay,
-          move: element,
-          link: figureSkatingElements[element as keyof typeof figureSkatingElements] || null
+          move: element.name,
+          link: figureSkatingElements[element.name as keyof typeof figureSkatingElements] || null
         });
       });
-
-      value['spins']?.forEach(element => {
-        result.push({
-          date: prettyDay,
-          move: element,
-          link: figureSkatingElements[element as keyof typeof figureSkatingElements] || null
-        });
-      });
-
-      value['moves']?.forEach(element => {
-        result.push({
-          date: prettyDay,
-          move: element,
-          link: figureSkatingElements[element as keyof typeof figureSkatingElements] || null
-        });
-      });
-
     });
 
 
@@ -106,6 +87,7 @@ export class MailsenderComponent {
         'tasks': result,
         'from':this.emailForm.get('email')?.value,
         'to': this.emailForm.get('destinationEmail')?.value,
+        'key': this.emailForm.get('password')?.value,
         'subject': 'Schedule update!'
 
     }
@@ -135,8 +117,8 @@ export class MailsenderComponent {
  export   function passwordMatcher(): ValidatorFn  {
   return (control: AbstractControl): ValidationErrors | null => {
     // Example check for at least one uppercase letter
-    if (control.value != environment.accesspassword) {
-      return { passwordMismatch: 'Enter a matching password' };
+    if (control.value  == null) {
+      return { passwordMismatch: 'Enter PWD' };
     }
     return null;  // Return null if valid
   };
