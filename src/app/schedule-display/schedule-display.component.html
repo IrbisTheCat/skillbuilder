@@ -1,4 +1,4 @@
-<div class="card-container">
+<div *ngIf="schedule.size>0" class="card-container fadein">
 
   <ng-container *ngFor="let entry of schedule | keyvalue">
     <mat-card appearance="outlined">

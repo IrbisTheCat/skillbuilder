@@ -13,3 +13,16 @@
     padding-top: 20px;
     padding-bottom: 20px;
   }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadein {
+    animation: fadeIn 1s ease-in-out;
+  }

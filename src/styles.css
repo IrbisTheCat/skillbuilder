@@ -20,3 +20,15 @@ app-root{
     margin: 0; /* Remove default margins */
 }
 
+@keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .fadein {
+    animation: fadeIn 1s ease-in-out;
+  }
