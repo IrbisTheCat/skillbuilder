@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
 import { ScheduleService } from '../schedule.service';
 import { Console } from 'console';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -21,19 +21,24 @@ import { Skill } from '../models/skill.model';
   styleUrl: './mailsender.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MailsenderComponent {
-
+export class MailsenderComponent implements OnInit{
+  schedule: Map<Date, Skill[]> = new Map<Date, Skill[]>();
   emailForm: FormGroup;
   private apiUrl =  environment.apiUrl;
   hide = signal(true);  
 
-
+  ngOnInit() {
+    this.scheduleService.schedule$.subscribe(schedule => {
+      this.schedule = schedule;
+      this.cdr.detectChanges(); 
+    });
+  }
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
 
-  constructor(private fb: FormBuilder, private scheduleService: ScheduleService, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private scheduleService: ScheduleService, private http: HttpClient , private cdr: ChangeDetectorRef) {
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       destinationEmail: ['', [Validators.required, Validators.email]],
@@ -92,16 +97,18 @@ export class MailsenderComponent {
 
     }
 
-
+    console.log(data)
 
 
     this.http.post<any>(`${this.apiUrl}`, data)
     .subscribe({
       next: (response) => {
         console.log('Success:', response);
+        this.resetForm();
       },
       error: (err) => {
         console.error('Error:', err);
+            this.resetForm();
       }
     });
   
@@ -109,6 +116,15 @@ export class MailsenderComponent {
     //return this.http.post<any>(`${this.apiUrl}/send`, data);
 
 
+  }
+  resetForm() {
+    this.emailForm.reset();
+    Object.keys(this.emailForm.controls).forEach((key) => {
+      let control = this.emailForm.get(key);
+      control?.setErrors(null);
+      control?.markAsPristine();
+      control?.markAsUntouched();
+    });
   }
 
 
